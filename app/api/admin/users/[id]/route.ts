@@ -1,0 +1,15 @@
+import { query } from "@/lib/db";
+import { requireSession } from "@/lib/auth";
+import { ok, fail } from "@/lib/route-helpers";
+
+export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const auth = await requireSession(["admin"]);
+  if ("error" in auth) return fail(auth.error, auth.status);
+  try {
+    const { id } = await params;
+    await query("DELETE FROM users WHERE id = ?", [id]);
+    return ok({ message: "User berhasil dihapus" });
+  } catch (e) {
+    return fail(e instanceof Error ? e.message : "Gagal menghapus user", 500);
+  }
+}

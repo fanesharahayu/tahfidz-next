@@ -1,0 +1,21 @@
+import { query } from "@/lib/db";
+import { requireSession } from "@/lib/auth";
+import { ok, fail } from "@/lib/route-helpers";
+
+export async function DELETE(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const auth = await requireSession(["musyrif"]);
+  if ("error" in auth) return fail(auth.error, auth.status);
+  try {
+    const { id } = await params;
+    const [result] = await query(
+      `DELETE FROM target_hafalan WHERE id = ? AND santri_id IN (SELECT id FROM santri WHERE musyrif_id = ?)`,
+      [id, auth.user.id]
+    );
+    if ((result[0] as unknown as { affectedRows: number }).affectedRows === 0) {
+      return fail("Target tidak ditemukan", 404);
+    }
+    return ok({ message: "Target dihapus" });
+  } catch (e) {
+    return fail(e instanceof Error ? e.message : "Gagal menghapus target", 500);
+  }
+}

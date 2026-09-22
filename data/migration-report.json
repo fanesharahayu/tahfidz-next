@@ -1,0 +1,25 @@
+{
+  "migratedAt": "2026-09-22T07:04:44.992Z",
+  "legacyDb": "D:\\CobaCoba\\tahfidz\\tahfidz.db",
+  "targetDb": "D:\\CobaCoba\\tahfidz-next\\data\\tahfidz.db",
+  "srcCounts": {
+    "users": 11,
+    "santri": 4,
+    "musyrif": 3,
+    "wali_santri": 3,
+    "target_hafalan": 3,
+    "setoran": 9
+  },
+  "tgtCounts": {
+    "users": 11,
+    "santri": 4,
+    "musyrif": 3,
+    "wali_santri": 3,
+    "target_hafalan": 3,
+    "setoran": 9
+  },
+  "srcChecksum": "b97d589183e9b0a739d3c5fbbb205bad7a55e86c57c125b8fd6ccf555dd91fe7",
+  "tgtChecksum": "b97d589183e9b0a739d3c5fbbb205bad7a55e86c57c125b8fd6ccf555dd91fe7",
+  "sameCounts": true,
+  "sameSum": true
+}
