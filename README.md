@@ -45,6 +45,7 @@ app/
     admin/stats|users|santri|target|wali-links|wali-link|setoran
     musyrif/walis|wali-links|wali-link|targets|target|santri|setoran
     santri/dashboard  wali/children|child/[santriId]
+    health                       # GET publik: {status, counts} untuk cek deploy
 lib/
   schema.ts                    # SCHEMA 1:1 dari scripts/seed.js legacy
   db.ts                        # better-sqlite3 + query() kompatibel mysql2 + auto-seed
@@ -61,6 +62,59 @@ data/
   tahfidz.db                   # hasil migrasi (gitignored)
   migration-report.json        # bukti counts + checksum sama
 ```
+
+## Deploy
+
+Aplikasi ini **dual-target** (seperti legacy):
+
+### A. Vercel — demo (data tidak permanen)
+
+Zero-config untuk Next.js: tidak perlu `vercel.json`.
+
+1. Vercel → Add New Project → Import `fanesharahayu/tahfidz-next`.
+2. Environment Variables: `SESSION_SECRET` = string acak panjang (wajib).
+3. Deploy. Cek `https://<app>.vercel.app/api/health` → `{status:"ok"}`.
+
+Batasan: DB memakai `/tmp/tahfidz.db` (lihat `lib/db.ts`) + auto-seed
+tiap cold start — **data hilang berkala**, session JWT tetap valid.
+Jangan pakai untuk data asli.
+
+### B. VPS — produksi (data permanen, disarankan)
+
+**Opsi 1 — Docker Compose (disarankan):**
+
+```bash
+git clone https://github.com/fanesharahayu/tahfidz-next.git
+cd tahfidz-next
+echo "SESSION_SECRET=$(openssl rand -hex 32)" > .env
+docker compose up -d --build
+curl http://localhost:3000/api/health   # {status:"ok", counts:{...}}
+```
+
+DB tersimpan di volume `tahfidz-data` (`DB_PATH=/data/tahfidz.db`).
+File `Dockerfile` memakai Node 22 + build tools untuk `better-sqlite3`.
+
+**Opsi 2 — manual (PM2 + Nginx):**
+
+```bash
+# Ubuntu/Debian, Node 22
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+sudo apt install -y nodejs git nginx
+git clone https://github.com/fanesharahayu/tahfidz-next.git
+cd tahfidz-next
+npm ci && cp .env.example .env   # isi SESSION_SECRET
+npm run db:migrate                # bawa DB legacy, atau biarkan auto-seed
+npm run build
+sudo npm install -g pm2
+pm2 start npm --name tahfidz-next -- start
+pm2 save && pm2 startup
+```
+
+Lalu reverse-proxy Nginx ke `127.0.0.1:3000` + HTTPS via certbot
+(pola sama seperti `../tahfidz/docs/migrasi-vps.md`).
+
+**Backup rutin (VPS):** `docker volume` / `/var/lib/docker/volumes/tahfidz-next_tahfidz-data/_data/tahfidz.db`
+disalin berkala (`cp tahfidz.db backup/tahfidz-$(date +%F).db`).
 
 ## Migrasi data (aman, tanpa kehilangan)
 
