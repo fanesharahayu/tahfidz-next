@@ -163,10 +163,16 @@ export function openTestDb(dbPath = ":memory:"): Database.Database {
   return db;
 }
 
-// Kompat query() ala mysql2 agar porting routes minim: SELECT -> [rows], lain -> [{insertId, affectedRows}]
-// Note: first element bisa array (SELECT) atau object (INSERT/UPDATE/DELETE) mengikuti kontrak legacy.
-export async function query<T = DbRow>(sql: string, params: unknown[] = []): Promise<[any, []]> {
-  const db = getDb();
+// Inti query yang bisa diuji tanpa menyentuh DB asli (pakai openTestDb).
+// Kontrak (sama seperti legacy config/db.js):
+//   SELECT -> [rows, []]        — rows berupa array
+//   INSERT -> [info, []]        — info = {insertId, lastID, affectedRows}
+//   UPDATE/DELETE -> [info, []] — info = {affectedRows}
+export function queryOn<T = DbRow>(
+  db: Database.Database,
+  sql: string,
+  params: unknown[] = []
+): [any, []] {
   const trimmed = sql.trim().toUpperCase();
   if (trimmed.startsWith("INSERT")) {
     const info = db.prepare(sql).run(...(params as unknown[]));
@@ -179,6 +185,12 @@ export async function query<T = DbRow>(sql: string, params: unknown[] = []): Pro
   }
   const rows = db.prepare(sql).all(...(params as unknown[])) as T[];
   return [rows || [], []];
+}
+
+// Kompat query() ala mysql2 agar porting routes minim: SELECT -> [rows], lain -> [{insertId, affectedRows}]
+// Note: first element bisa array (SELECT) atau object (INSERT/UPDATE/DELETE) mengikuti kontrak legacy.
+export async function query<T = DbRow>(sql: string, params: unknown[] = []): Promise<[any, []]> {
+  return queryOn<T>(getDb(), sql, params);
 }
 
 export function querySync<T = DbRow>(sql: string, params: unknown[] = []): T[] {

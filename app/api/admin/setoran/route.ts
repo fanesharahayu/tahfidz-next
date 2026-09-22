@@ -20,7 +20,7 @@ export async function POST(req: Request) {
       [santri_id, musyrif_id, juz, surah, ayat_awal || 0, ayat_akhir || 0, jenis || "hafalan_baru", nilai || "lancar", catatan || null]
     );
     return ok(
-      { message: "Setoran dicatat", id: (result[0] as unknown as { lastID: number }).lastID },
+      { message: "Setoran dicatat", id: (result as unknown as { lastID: number }).lastID },
       201
     );
   } catch (e) {

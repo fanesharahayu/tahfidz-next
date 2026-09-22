@@ -13,7 +13,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
        WHERE id = ?`,
       [musyrif_id, juz, surah, ayat_awal || 0, ayat_akhir || 0, jenis, nilai, catatan || null, id]
     );
-    if ((result[0] as unknown as { affectedRows: number }).affectedRows === 0)
+    if ((result as unknown as { affectedRows: number }).affectedRows === 0)
       return fail("Setoran tidak ditemukan", 404);
     return ok({ message: "Setoran diperbarui" });
   } catch (e) {

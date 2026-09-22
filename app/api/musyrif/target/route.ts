@@ -25,7 +25,7 @@ export async function POST(req: Request) {
     return ok(
       {
         message: "Target hafalan disimpan",
-        id: (result[0] as unknown as { lastID: number }).lastID,
+        id: (result as unknown as { lastID: number }).lastID,
       },
       201
     );

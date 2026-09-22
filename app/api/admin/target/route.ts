@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     );
     await query("UPDATE santri SET target_juz = ? WHERE id = ?", [target_juz, santri_id]);
     return ok(
-      { message: "Target hafalan disimpan", id: (result[0] as unknown as { lastID: number }).lastID },
+      { message: "Target hafalan disimpan", id: (result as unknown as { lastID: number }).lastID },
       201
     );
   } catch (e) {

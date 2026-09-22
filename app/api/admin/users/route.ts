@@ -28,7 +28,7 @@ export async function POST(req: Request) {
       "INSERT INTO users (username, email, password, nama, role) VALUES (?, ?, ?, ?, ?)",
       [username, email, hash, nama, role]
     );
-    const id = (result[0] as unknown as { lastID: number }).lastID;
+    const id = (result as unknown as { lastID: number }).lastID;
     if (role === "musyrif") await query("INSERT INTO musyrif (user_id) VALUES (?)", [id]);
     else if (role === "santri") await query("INSERT INTO santri (user_id) VALUES (?)", [id]);
     return ok({ message: "User berhasil dibuat", id }, 201);

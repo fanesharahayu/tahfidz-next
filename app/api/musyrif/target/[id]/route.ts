@@ -11,7 +11,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ id: 
       `DELETE FROM target_hafalan WHERE id = ? AND santri_id IN (SELECT id FROM santri WHERE musyrif_id = ?)`,
       [id, auth.user.id]
     );
-    if ((result[0] as unknown as { affectedRows: number }).affectedRows === 0) {
+    if ((result as unknown as { affectedRows: number }).affectedRows === 0) {
       return fail("Target tidak ditemukan", 404);
     }
     return ok({ message: "Target dihapus" });

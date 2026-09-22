@@ -18,7 +18,7 @@ export async function POST(req: Request) {
       "INSERT INTO users (username, email, password, nama, role) VALUES (?, ?, ?, ?, ?)",
       [username, email, hash, nama, "santri"]
     );
-    const id = (result[0] as unknown as { lastID: number }).lastID;
+    const id = (result as unknown as { lastID: number }).lastID;
     await query(
       `INSERT INTO santri (user_id, nis, kelas, target_juz, musyrif_id, tanggal_bergabung)
        VALUES (?, ?, ?, ?, ?, ?)`,
