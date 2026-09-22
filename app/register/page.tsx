@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { get, post } from "@/lib/api";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/dialog";
@@ -70,151 +69,168 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Daftar Akun Baru</CardTitle>
-          <CardDescription>Lengkapi data di bawah untuk membuat akun</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="nama">Nama Lengkap</Label>
-              <Input
-                id="nama"
-                type="text"
-                placeholder="Nama lengkap"
-                value={nama}
-                onChange={(e) => setNama(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
-              <Input
-                id="username"
-                type="text"
-                placeholder="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="email@contoh.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Minimal 6 karakter"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="role">Peran</Label>
-              <Select
-                value={role}
-                onChange={setRole}
-                options={[
-                  { value: "santri", label: "Santri" },
-                  { value: "musyrif", label: "Musyrif" },
-                  { value: "wali", label: "Wali" },
-                ]}
-              />
-            </div>
+    <div className="flex min-h-screen items-center justify-center bg-[linear-gradient(135deg,#115e59_0%,#0f766e_50%,#134e4a_100%)] p-5 py-10">
+      <div className="w-full max-w-[420px] rounded-[18px] bg-white px-9 py-10 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+        <div className="mb-6 text-center">
+          <div className="mb-3 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-[linear-gradient(135deg,#0f766e,#14b8a6)] text-3xl text-white">
+            📖
+          </div>
+          <h1 className="text-[22px] font-semibold text-[#115e59]">Buat Akun Baru</h1>
+          <p className="mt-1 text-[13px] text-[#64748b]">Pendaftaran untuk Musyrif, Santri &amp; Wali Santri</p>
+        </div>
+        {error ? (
+          <div className="mb-4 rounded-[10px] border border-[#fecaca] bg-[#fef2f2] px-4 py-3 text-[13px] text-[#dc2626]" role="alert">
+            {error}
+          </div>
+        ) : null}
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <Label htmlFor="role" className="mb-1.5 block text-[13px] font-semibold text-[#1e293b]">Daftar sebagai</Label>
+            <Select
+              value={role}
+              onChange={setRole}
+              options={[
+                { value: "musyrif", label: "Musyrif (Pengajar)" },
+                { value: "santri", label: "Santri (Hafiz)" },
+                { value: "wali", label: "Wali Santri" },
+              ]}
+              className="h-[44px] rounded-[10px] border-[#e2e8f0] text-sm"
+            />
+          </div>
+          <div className="mb-4">
+            <Label htmlFor="nama" className="mb-1.5 block text-[13px] font-semibold text-[#1e293b]">Nama Lengkap</Label>
+            <Input
+              id="nama"
+              type="text"
+              placeholder="Nama lengkap"
+              value={nama}
+              onChange={(e) => setNama(e.target.value)}
+              required
+              className="h-[44px] rounded-[10px] border-[#e2e8f0] text-sm focus-visible:ring-[#14b8a6]"
+            />
+          </div>
+          <div className="mb-4">
+            <Label htmlFor="username" className="mb-1.5 block text-[13px] font-semibold text-[#1e293b]">Username</Label>
+            <Input
+              id="username"
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              className="h-[44px] rounded-[10px] border-[#e2e8f0] text-sm focus-visible:ring-[#14b8a6]"
+            />
+          </div>
+          <div className="mb-4">
+            <Label htmlFor="email" className="mb-1.5 block text-[13px] font-semibold text-[#1e293b]">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="email@contoh.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="h-[44px] rounded-[10px] border-[#e2e8f0] text-sm focus-visible:ring-[#14b8a6]"
+            />
+          </div>
+          <div className="mb-4">
+            <Label htmlFor="password" className="mb-1.5 block text-[13px] font-semibold text-[#1e293b]">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="Minimal 6 karakter"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="h-[44px] rounded-[10px] border-[#e2e8f0] text-sm focus-visible:ring-[#14b8a6]"
+            />
+          </div>
 
-            {role === "santri" ? (
-              <>
-                <div className="space-y-2">
-                  <Label htmlFor="nis">NIS</Label>
-                  <Input
-                    id="nis"
-                    type="text"
-                    placeholder="Nomor induk santri"
-                    value={nis}
-                    onChange={(e) => setNis(e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="kelas">Kelas</Label>
-                  <Input
-                    id="kelas"
-                    type="text"
-                    placeholder="Kelas"
-                    value={kelas}
-                    onChange={(e) => setKelas(e.target.value)}
-                  />
-                </div>
-              </>
-            ) : null}
-
-            {role === "musyrif" ? (
-              <div className="space-y-2">
-                <Label htmlFor="spesialisasi">Spesialisasi</Label>
+          {role === "santri" ? (
+            <>
+              <div className="mb-4">
+                <Label htmlFor="nis" className="mb-1.5 block text-[13px] font-semibold text-[#1e293b]">NIS (Nomor Induk Santri) (opsional)</Label>
                 <Input
-                  id="spesialisasi"
+                  id="nis"
                   type="text"
-                  placeholder="Contoh: Tahfidz, Tajwid"
-                  value={spesialisasi}
-                  onChange={(e) => setSpesialisasi(e.target.value)}
+                  placeholder="Nomor induk santri"
+                  value={nis}
+                  onChange={(e) => setNis(e.target.value)}
+                  className="h-[44px] rounded-[10px] border-[#e2e8f0] text-sm focus-visible:ring-[#14b8a6]"
                 />
               </div>
-            ) : null}
+              <div className="mb-4">
+                <Label htmlFor="kelas" className="mb-1.5 block text-[13px] font-semibold text-[#1e293b]">Kelas</Label>
+                <Input
+                  id="kelas"
+                  type="text"
+                  placeholder="Kelas"
+                  value={kelas}
+                  onChange={(e) => setKelas(e.target.value)}
+                  className="h-[44px] rounded-[10px] border-[#e2e8f0] text-sm focus-visible:ring-[#14b8a6]"
+                />
+              </div>
+            </>
+          ) : null}
 
-            {role === "wali" ? (
-              <>
-                <div className="space-y-2">
-                  <Label htmlFor="santri_id">Santri Terkait</Label>
-                  <Select
-                    value={santriId}
-                    onChange={setSantriId}
-                    placeholder="Pilih santri"
-                    options={santriList.map((s) => ({
-                      value: String(s.santri_id),
-                      label: `${s.nama}${s.nis ? ` (${s.nis})` : ""}`,
-                    }))}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="relasi">Relasi</Label>
-                  <Input
-                    id="relasi"
-                    type="text"
-                    placeholder="Contoh: Ayah, Ibu, Wali Santri"
-                    value={relasi}
-                    onChange={(e) => setRelasi(e.target.value)}
-                  />
-                </div>
-              </>
-            ) : null}
+          {role === "musyrif" ? (
+            <div className="mb-4">
+              <Label htmlFor="spesialisasi" className="mb-1.5 block text-[13px] font-semibold text-[#1e293b]">Spesialisasi</Label>
+              <Input
+                id="spesialisasi"
+                type="text"
+                placeholder="Contoh: Tahfidz, Tajwid"
+                value={spesialisasi}
+                onChange={(e) => setSpesialisasi(e.target.value)}
+                className="h-[44px] rounded-[10px] border-[#e2e8f0] text-sm focus-visible:ring-[#14b8a6]"
+              />
+            </div>
+          ) : null}
 
-            {error ? <p className="text-sm text-destructive">{error}</p> : null}
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Memproses..." : "Daftar"}
-            </Button>
-          </form>
-        </CardContent>
-        <CardFooter>
-          <p className="text-sm text-muted-foreground">
-            Sudah punya akun?{" "}
-            <Link href="/login" className="text-primary underline-offset-4 hover:underline">
-              Masuk di sini
-            </Link>
-          </p>
-        </CardFooter>
-      </Card>
+          {role === "wali" ? (
+            <>
+              <div className="mb-4">
+                <Label htmlFor="santri_id" className="mb-1.5 block text-[13px] font-semibold text-[#1e293b]">Santri Terkait</Label>
+                <Select
+                  value={santriId}
+                  onChange={setSantriId}
+                  placeholder="Pilih santri"
+                  options={santriList.map((s) => ({
+                    value: String(s.santri_id),
+                    label: `${s.nama}${s.nis ? ` (${s.nis})` : ""}`,
+                  }))}
+                  className="h-[44px] rounded-[10px] border-[#e2e8f0] text-sm"
+                />
+              </div>
+              <div className="mb-4">
+                <Label htmlFor="relasi" className="mb-1.5 block text-[13px] font-semibold text-[#1e293b]">Relasi</Label>
+                <Input
+                  id="relasi"
+                  type="text"
+                  placeholder="Contoh: Ayah, Ibu, Wali Santri"
+                  value={relasi}
+                  onChange={(e) => setRelasi(e.target.value)}
+                  className="h-[44px] rounded-[10px] border-[#e2e8f0] text-sm focus-visible:ring-[#14b8a6]"
+                />
+              </div>
+            </>
+          ) : null}
+
+          <Button
+            type="submit"
+            disabled={loading}
+            className="h-[44px] w-full rounded-[10px] bg-[#0f766e] text-sm font-semibold text-white hover:bg-[#115e59]"
+          >
+            {loading ? "Memproses..." : "Daftar"}
+          </Button>
+        </form>
+        <div className="mt-[18px] text-center text-[13px] text-[#64748b]">
+          Sudah punya akun?{" "}
+          <Link href="/login" className="font-medium text-[#0f766e] hover:underline">
+            Masuk di sini
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }
